@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MOCK_CAMERA_CONFIGS } from '@/lib/mockData';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.50:8009';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);

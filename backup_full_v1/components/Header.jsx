@@ -34,7 +34,7 @@ export default function Header({
       <div className="header-status-group">
         <div className="status-pill">
           <span className={`status-dot ${connectionStatus === 'mock' ? 'mock' : ''}`}></span>
-          <span>{connectionStatus === 'live' ? 'Connected (10.10.12.50:8009)' : 'Snapshot Cache'}</span>
+          <span>{connectionStatus === 'live' ? 'Connected (10.10.12.52:8009)' : 'Snapshot Cache'}</span>
         </div>
         <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', fontFamily: 'var(--font-mono)' }}>
           Sync in {countdown}s

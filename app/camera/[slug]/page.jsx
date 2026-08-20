@@ -8,5 +8,5 @@ export default function CameraPage() {
   const params = useParams();
   const slug = params?.slug || '';
 
-  return <CameraDashboardView cameraSlug={slug} useCaseSlug="anpr" />;
+  return <CameraDashboardView cameraSlug={slug} useCaseSlug="" />;
 }

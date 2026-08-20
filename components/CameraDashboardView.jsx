@@ -1,26 +1,34 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import ANPRFilterBar from '@/components/ANPRFilterBar';
 import ANPRTable from '@/components/ANPRTable';
 import SnapshotGrid from '@/components/SnapshotGrid';
 import InspectorModal from '@/components/InspectorModal';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ArrowLeft,
+  Camera as CameraIcon,
+  Cpu,
+  Car,
+  User,
+  Box,
+  Layers
+} from 'lucide-react';
 import { toCameraSlug, findCameraBySlugOrId } from '@/lib/cameraUtils';
-import { resolveUseCase } from '@/lib/useCaseUtils';
+import { resolveUseCase, toUseCaseSlug, USE_CASE_MAP } from '@/lib/useCaseUtils';
 
 export default function CameraDashboardView({
   cameraSlug = '',
   useCaseSlug = ''
 }) {
+  const router = useRouter();
   const [theme, setTheme] = useState('light');
   const [viewMode, setViewMode] = useState('table'); // 'table' | 'grid'
-
-  // Resolve Use Case from route
-  const currentUseCase = useMemo(() => {
-    return resolveUseCase(useCaseSlug || 'anpr');
-  }, [useCaseSlug]);
 
   // Data states
   const [cameras, setCameras] = useState([]);
@@ -33,6 +41,37 @@ export default function CameraDashboardView({
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [countdown, setCountdown] = useState(10);
+
+  // Active Use Case state
+  const [selectedUseCaseSlug, setSelectedUseCaseSlug] = useState(useCaseSlug || '');
+
+  // Keep in sync with prop if prop changes
+  useEffect(() => {
+    if (useCaseSlug) {
+      setSelectedUseCaseSlug(useCaseSlug);
+    }
+  }, [useCaseSlug]);
+
+  // Identify current camera object
+  const currentCamera = useMemo(() => {
+    if (!cameraSlug) return null;
+    return findCameraBySlugOrId(cameras, cameraSlug);
+  }, [cameras, cameraSlug]);
+
+  // If no useCaseSlug provided, default to camera's attached use case or ANPR
+  useEffect(() => {
+    if (!selectedUseCaseSlug && currentCamera?.useCases && currentCamera.useCases.length > 0) {
+      const primarySlug = toUseCaseSlug(currentCamera.useCases[0].use_case_name || currentCamera.useCases[0].use_case_id, useCases);
+      setSelectedUseCaseSlug(primarySlug);
+    } else if (!selectedUseCaseSlug) {
+      setSelectedUseCaseSlug('anpr');
+    }
+  }, [selectedUseCaseSlug, currentCamera, useCases]);
+
+  // Resolve Use Case from active slug and metadata
+  const currentUseCase = useMemo(() => {
+    return resolveUseCase(selectedUseCaseSlug || 'anpr', useCases);
+  }, [selectedUseCaseSlug, useCases]);
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,12 +134,6 @@ export default function CameraDashboardView({
       console.warn('Metadata fetch failed', err);
     }
   }, []);
-
-  // Identify current camera object
-  const currentCamera = useMemo(() => {
-    if (!cameraSlug) return null;
-    return findCameraBySlugOrId(cameras, cameraSlug);
-  }, [cameras, cameraSlug]);
 
   const cameraId = currentCamera?.id || (cameraSlug && !['anpr', 'object', 'objects', 'face', 'faces'].includes(cameraSlug.toLowerCase()) ? cameraSlug : null);
   const cameraName = currentCamera?.name || (cameraId ? `Camera ${cameraSlug}` : null);
@@ -298,6 +331,73 @@ export default function CameraDashboardView({
       />
 
       <main className="anpr-main-container">
+        {/* Navigation & AI Model Switcher Bar */}
+        <div className="camera-nav-banner">
+          <div className="camera-nav-left">
+            <Link href="/" className="camera-back-pill">
+              <ArrowLeft size={14} />
+              <span>All Facility Cameras</span>
+            </Link>
+            {cameraName && (
+              <div className="camera-current-badge">
+                <CameraIcon size={14} />
+                <span>{cameraName}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="usecase-tab-switcher">
+            <button
+              type="button"
+              className={`usecase-tab-btn ${currentUseCase.slug === 'anpr' ? 'active' : ''}`}
+              onClick={() => {
+                setSelectedUseCaseSlug('anpr');
+                setPage(1);
+                if (cameraSlug) {
+                  window.history.pushState(null, '', `/camera/${cameraSlug}/anpr`);
+                } else {
+                  window.history.pushState(null, '', `/anpr`);
+                }
+              }}
+            >
+              <Car size={14} />
+              <span>ANPR</span>
+            </button>
+            <button
+              type="button"
+              className={`usecase-tab-btn ${currentUseCase.slug === 'face' ? 'active' : ''}`}
+              onClick={() => {
+                setSelectedUseCaseSlug('face');
+                setPage(1);
+                if (cameraSlug) {
+                  window.history.pushState(null, '', `/camera/${cameraSlug}/face`);
+                } else {
+                  window.history.pushState(null, '', `/face`);
+                }
+              }}
+            >
+              <User size={14} />
+              <span>Face Recognition</span>
+            </button>
+            <button
+              type="button"
+              className={`usecase-tab-btn ${currentUseCase.slug === 'object' ? 'active' : ''}`}
+              onClick={() => {
+                setSelectedUseCaseSlug('object');
+                setPage(1);
+                if (cameraSlug) {
+                  window.history.pushState(null, '', `/camera/${cameraSlug}/object`);
+                } else {
+                  window.history.pushState(null, '', `/object`);
+                }
+              }}
+            >
+              <Box size={14} />
+              <span>Object Detection</span>
+            </button>
+          </div>
+        </div>
+
         {/* Scoped Detections Section */}
         <section className="camera-events-section">
           <ANPRFilterBar

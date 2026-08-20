@@ -93,7 +93,10 @@ export default function AdminCameraGrid({
         <div className="admin-camera-grid">
           {filteredCameras.map((cam) => {
             const isOnline = cam.is_active !== false;
-            const targetRoute = `/camera/${cam.slug}/anpr`;
+            const primaryUc = cam.useCases && cam.useCases.length > 0 ? cam.useCases[0] : null;
+            const primaryUcSlug = primaryUc ? toUseCaseSlug(primaryUc.use_case_name || primaryUc.use_case_id) : 'anpr';
+            const primaryUcName = primaryUc?.use_case_name || 'AI Vision';
+            const targetRoute = `/camera/${cam.slug}/${primaryUcSlug}`;
 
             return (
               <div key={cam.id} className="admin-camera-card">
@@ -136,7 +139,7 @@ export default function AdminCameraGrid({
                   {/* Hover Enter Overlay */}
                   <div className="admin-card-hover-overlay">
                     <span className="admin-card-enter-pill">
-                      <span>Open ANPR Dashboard</span>
+                      <span>Open {primaryUcName} Dashboard</span>
                       <ExternalLink size={13} />
                     </span>
                   </div>

@@ -21,9 +21,9 @@ export async function GET(request) {
       message: 'Fallback mock use cases',
       status: 'success',
       data: [
-        { id: 'e0820c96-a414-4fd1-aaae-4fa3beaaee7f', name: 'ANPR Detection', use_case_type: 'anpr' },
-        { id: 'ca6503cf-f881-4773-ab46-f6f22289d1bf', name: 'Object Detection', use_case_type: 'object_detection' },
-        { id: '5345627b-3bcd-4aa5-9dab-202ac30d7f28', name: 'Face Recognition', use_case_type: 'face_recognition' }
+        { id: 'bf6e9245-1e14-4d11-a467-41ebd48c93a4', name: 'ANPR Detection', use_case_type: 'anpr' },
+        { id: 'ae933a6f-c17c-49e1-9fbc-8e75710100e7', name: 'Object Detection', use_case_type: 'object_detection' },
+        { id: 'f3803638-3844-45d5-ad8f-930d25605b6b', name: 'Face Recognition', use_case_type: 'face_recognition' }
       ]
     });
   }

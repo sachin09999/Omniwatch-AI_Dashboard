@@ -14,5 +14,5 @@ export default function DynamicTopLevelPage() {
   }
 
   // Otherwise, it's a camera slug (/terrace-cam-23, /ip-parking)
-  return <CameraDashboardView cameraSlug={slug} useCaseSlug="anpr" />;
+  return <CameraDashboardView cameraSlug={slug} useCaseSlug="" />;
 }

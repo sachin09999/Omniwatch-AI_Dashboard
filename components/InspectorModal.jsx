@@ -46,9 +46,10 @@ export default function InspectorModal({
   const det = detection?.detections?.[0] || {};
   const meta = det.metadata || {};
   const isAnpr = Boolean(meta.plate_text) || detection?.use_case_name?.toLowerCase().includes('anpr');
-  const className = det.class_name || (isAnpr ? 'License Plate' : 'Object');
-  const confPercent = Math.round((det.confidence || 0) * 1000) / 10;
-  const plateText = meta.plate_text || det.class_name || '2001';
+  const isFace = detection?.use_case_name?.toLowerCase().includes('face');
+  const className = det.class_name ? (isFace && det.class_name === 'unknown' ? 'Face (Unknown)' : det.class_name) : (isAnpr ? 'License Plate' : 'Object');
+  const confPercent = Math.round((det.confidence || meta.det_score || 0) * 1000) / 10;
+  const plateText = meta.plate_text || (isFace ? (det.class_name === 'unknown' ? 'Face (Unknown)' : det.class_name) : det.class_name || 'Detection');
   const plateOrigin = meta.plate_origin || 'UAE';
 
   const rawPhotoUrl = detection?.photo_url || detection?.thumbnail_url;
@@ -67,7 +68,7 @@ export default function InspectorModal({
     : rawVideoUrl || (photoUrl ? photoUrl.replace('/photo', '/video') : null);
 
   const totalSlides = 3;
-  const slideLabels = ['Full Scene', 'Plate Crop', 'Video Recording'];
+  const slideLabels = ['Full Scene', isAnpr ? 'Plate Crop' : isFace ? 'Face Crop' : 'Object Crop', 'Video Recording'];
 
   // Reset zoom on slide or detection change
   const resetZoom = useCallback(() => {

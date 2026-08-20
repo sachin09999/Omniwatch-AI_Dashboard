@@ -147,7 +147,8 @@ export default function ANPRTable({
           {detections.map((item, idx) => {
             const det = item.detections?.[0] || {};
             const meta = det.metadata || {};
-            const plateText = meta.plate_text || det.class_name || '—';
+            const isFace = item.use_case_name?.toLowerCase().includes('face');
+            const plateText = meta.plate_text || (isFace ? (det.class_name === 'unknown' ? 'Unidentified Face' : det.class_name || 'Face') : det.class_name ? det.class_name.toUpperCase() : '—');
             const formattedDate = formatDateTime(item.detected_at);
             
             // Image source: Use full scene photo snapshot for Detection Source

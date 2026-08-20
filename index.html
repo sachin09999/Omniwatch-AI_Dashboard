@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniVision AI - Enterprise Surveillance & ANPR Intelligence</title>
+    <meta name="description" content="Next-generation AI Vision Surveillance Dashboard with real-time ANPR detection telemetry, camera AI configuration matrix, and video inspection.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Top Application Header -->
+    <header class="app-header">
+        <div class="brand-wrapper">
+            <div class="brand-icon">
+                <i data-lucide="scan" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div>
+                <div class="brand-title">
+                    <span>OMNIVISION AI</span>
+                    <span style="font-size: 0.65rem; background: rgba(99,102,241,0.25); color: #a5b4fc; padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid rgba(99,102,241,0.4);">ENTERPRISE</span>
+                </div>
+                <div class="brand-subtitle">Automated Vision & ANPR Telemetry</div>
+            </div>
+        </div>
+
+        <div class="header-status-group">
+            <div class="status-pill">
+                <span id="statusDot" class="status-dot"></span>
+                <span id="statusLabel">CONNECTING...</span>
+            </div>
+            <span id="autoRefreshBadge" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">Auto-refreshing</span>
+        </div>
+
+        <div class="header-actions">
+            <button id="refreshBtn" class="btn" title="Refresh Live Data">
+                <i data-lucide="refresh-cw" style="width: 15px; height: 15px;"></i>
+                <span>Sync</span>
+            </button>
+            <div class="pill-group" style="margin: 0 0.25rem;">
+                <button id="exportCsvBtn" class="pill-btn" title="Export CSV">
+                    <i data-lucide="file-spreadsheet" style="width: 14px; height: 14px;"></i>
+                    CSV
+                </button>
+                <button id="exportJsonBtn" class="pill-btn" title="Export JSON">
+                    <i data-lucide="file-code" style="width: 14px; height: 14px;"></i>
+                    JSON
+                </button>
+            </div>
+            <button id="settingsBtn" class="btn btn-icon-only" title="Dashboard Settings">
+                <i data-lucide="settings" style="width: 17px; height: 17px;"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-bar">
+        <div class="tab-group">
+            <button class="tab-btn active" data-tab="feed">
+                <i data-lucide="activity" style="width: 16px; height: 16px;"></i>
+                <span>Surveillance Feed</span>
+                <span id="feedBadgeCount" class="tab-badge">0</span>
+            </button>
+            <button class="tab-btn" data-tab="configs">
+                <i data-lucide="video" style="width: 16px; height: 16px;"></i>
+                <span>Camera AI Matrix</span>
+                <span id="cameraCountBadge" class="tab-badge">4 Streams</span>
+            </button>
+            <button class="tab-btn" data-tab="analytics">
+                <i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i>
+                <span>ANPR Intelligence</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+
+        <!-- KPI Executive Summary Cards -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Grand Total Detections</span>
+                    <div class="kpi-icon-wrap">
+                        <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value-row">
+                    <span id="kpiGrandTotal" class="kpi-value">--</span>
+                </div>
+                <div class="kpi-meta">
+                    <span>Aggregated Events</span>
+                    <span class="kpi-pill info">All Streams</span>
+                </div>
+            </div>
+
+            <div class="kpi-card high-sev">
+                <div class="kpi-header">
+                    <span class="kpi-label">High Severity Alerts</span>
+                    <div class="kpi-icon-wrap">
+                        <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value-row">
+                    <span id="kpiHighAlerts" class="kpi-value">--</span>
+                </div>
+                <div class="kpi-meta">
+                    <span>Immediate Action</span>
+                    <span class="kpi-pill high">Critical Priority</span>
+                </div>
+            </div>
+
+            <div class="kpi-card med-sev">
+                <div class="kpi-header">
+                    <span class="kpi-label">Medium Severity</span>
+                    <div class="kpi-icon-wrap">
+                        <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value-row">
+                    <span id="kpiMedAlerts" class="kpi-value">--</span>
+                </div>
+                <div class="kpi-meta">
+                    <span>Warning Level</span>
+                    <span class="kpi-pill med">Caution</span>
+                </div>
+            </div>
+
+            <div class="kpi-card anpr-kpi">
+                <div class="kpi-header">
+                    <span class="kpi-label">ANPR License Plates</span>
+                    <div class="kpi-icon-wrap">
+                        <i data-lucide="car" style="width: 18px; height: 18px;"></i>
+                    </div>
+                </div>
+                <div class="kpi-value-row">
+                    <span id="kpiAnprCount" class="kpi-value">--</span>
+                </div>
+                <div class="kpi-meta">
+                    <span>Vehicle Registrations</span>
+                    <span class="kpi-pill info">UAE / Gulf</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- View 1: Surveillance Feed -->
+        <section id="feedView">
+            
+            <!-- Filter & Search Control Bar -->
+            <div class="filter-bar">
+                <div class="filter-left">
+                    <div class="search-box">
+                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                        <input type="text" id="searchInput" placeholder="Search by Plate (e.g. 2001), Camera, Zone...">
+                    </div>
+
+                    <div class="pill-group">
+                        <button class="pill-btn active" data-severity="all">All Severities</button>
+                        <button class="pill-btn high" data-severity="high">High</button>
+                        <button class="pill-btn med" data-severity="medium">Medium</button>
+                    </div>
+                </div>
+
+                <div class="filter-right">
+                    <select id="timeFrameSelect" class="filter-select">
+                        <option value="today" selected>Time Frame: Today</option>
+                        <option value="yesterday">Time Frame: Yesterday</option>
+                        <option value="this_week">Time Frame: This Week</option>
+                    </select>
+
+                    <select id="useCaseSelect" class="filter-select">
+                        <option value="all">Use Case: All Categories</option>
+                        <option value="e0820c96-a414-4fd1-aaae-4fa3beaaee7f">ANPR Detection</option>
+                        <option value="ca6503cf-f881-4773-ab46-f6f22289d1bf">Object Detection</option>
+                    </select>
+
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid" title="Grid Cards View">
+                            <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="view-btn" data-view="table" title="Data Table View">
+                            <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed Section Header -->
+            <div class="feed-header">
+                <div class="feed-title-wrap">
+                    <h2 class="feed-title">Active AI Detections</h2>
+                    <span id="feedCountBadge" class="feed-count-badge">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Detections Grid Cards -->
+            <div id="detectionsGrid" class="detections-grid">
+                <!-- Injected via app.js -->
+            </div>
+
+            <!-- Detections Table View -->
+            <div id="detectionsTableWrap" class="table-container" style="display: none;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>License Plate</th>
+                            <th>Severity</th>
+                            <th>Confidence</th>
+                            <th>Camera Name</th>
+                            <th>Zone Name</th>
+                            <th>Use Case</th>
+                            <th>Detected Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detectionsTableBody">
+                        <!-- Injected via app.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar">
+                <div id="paginationInfo" class="pagination-info">Showing 1-10 of 374 records</div>
+                <div class="pagination-controls">
+                    <button id="prevPageBtn" class="btn">
+                        <i data-lucide="chevron-left" style="width: 15px; height: 15px;"></i>
+                        Previous
+                    </button>
+                    <button id="nextPageBtn" class="btn">
+                        Next
+                        <i data-lucide="chevron-right" style="width: 15px; height: 15px;"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- View 2: Camera AI Configurations Matrix -->
+        <section id="configsView" style="display: none;">
+            <div class="feed-header">
+                <div class="feed-title-wrap">
+                    <h2 class="feed-title">Camera Stream & AI Config Matrix</h2>
+                    <span class="feed-count-badge">Endpoint: /ai/camera-ai-configs</span>
+                </div>
+            </div>
+            <div id="cameraMatrixGrid" class="matrix-grid">
+                <!-- Injected via app.js -->
+            </div>
+        </section>
+
+        <!-- View 3: ANPR Intelligence & Analytics -->
+        <section id="analyticsView" style="display: none;">
+            <div class="analytics-deck">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Hourly Detections Frequency (Today)</h3>
+                        <span class="kpi-pill info">Real-time Telemetry</span>
+                    </div>
+                    <div class="chart-canvas-wrap">
+                        <canvas id="timelineChartCanvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Top Detected License Plates</h3>
+                        <span class="kpi-pill high">Top Frequency</span>
+                    </div>
+                    <div id="topPlatesList" style="display: flex; flex-direction: column; gap: 0.65rem; overflow-y: auto; max-height: 280px;">
+                        <!-- Injected via app.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive AI Vision Inspector Modal -->
+    <div id="inspectorModal" class="modal-backdrop anpr-dialog-backdrop">
+        <div class="anpr-dialog-container">
+            <div class="anpr-dialog-header">
+                <div class="anpr-dialog-title-group">
+                    <div class="anpr-header-icon-box">
+                        <i data-lucide="video" class="anpr-header-icon" style="width: 18px; height: 18px;"></i>
+                    </div>
+                    <h3 class="anpr-dialog-title">ANPR Detection — Snapshot &amp; recording</h3>
+                    <span id="modalSrId" class="anpr-dialog-id-badge">ID: #48707</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button id="modalBtnDownload" class="anpr-download-btn" title="Download Image">
+                        <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                        <span>Download</span>
+                    </button>
+                    <button id="modalBtnFullscreen" class="anpr-icon-btn" title="Full Screen">
+                        <i data-lucide="maximize-2" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <button id="closeInspectorBtn" class="anpr-dialog-close" aria-label="Close">
+                        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="anpr-dialog-body-stacked">
+                <!-- Media Viewport with Carousel & Fullscreen Trigger -->
+                <div id="modalMediaViewport" class="anpr-media-viewport">
+                    <div id="modalSlideBadge" class="anpr-slide-badge">
+                        <span id="modalSlideStep" class="anpr-slide-step">1 of 3</span>
+                        <span id="modalSlideName" class="anpr-slide-name">AI Snapshot Overlay</span>
+                    </div>
+
+                    <button id="modalFullscreenOverlayBtn" class="anpr-fullscreen-overlay-btn" title="Toggle Full Screen">
+                        <i data-lucide="maximize-2" style="width: 18px; height: 18px;"></i>
+                    </button>
+
+                    <!-- Slide 0: AI Canvas -->
+                    <div id="slide0" class="anpr-slide-item">
+                        <canvas id="detectionCanvas" class="anpr-dialog-canvas" style="cursor: pointer;"></canvas>
+                        <div class="anpr-fullscreen-hint">
+                            <i data-lucide="maximize-2" style="width: 13px; height: 13px;"></i>
+                            <span>Click image for Full Screen</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 1: Clean Photo -->
+                    <div id="slide1" class="anpr-slide-item" style="display: none;">
+                        <img id="modalCleanImg" src="" alt="High-Res Camera Capture" class="anpr-dialog-img" style="cursor: pointer;" />
+                        <div class="anpr-fullscreen-hint">
+                            <i data-lucide="maximize-2" style="width: 13px; height: 13px;"></i>
+                            <span>Click image for Full Screen</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Video Stream Clip Player -->
+                    <div id="slide2" class="anpr-slide-item" style="display: none;">
+                        <div class="anpr-video-wrapper">
+                            <video id="modalVideoPlayer" controls playsinline class="anpr-dialog-video">
+                                Your browser does not support HTML5 video streaming.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <button id="modalPrevArrow" class="anpr-carousel-arrow left" title="Previous Slide">
+                        <i data-lucide="chevron-left" style="width: 22px; height: 22px;"></i>
+                    </button>
+                    <button id="modalNextArrow" class="anpr-carousel-arrow right" title="Next Slide">
+                        <i data-lucide="chevron-right" style="width: 22px; height: 22px;"></i>
+                    </button>
+
+                    <!-- Pagination Dots -->
+                    <div id="modalCarouselDots" class="anpr-carousel-dots">
+                        <button class="anpr-dot active" data-slide="0" title="AI Snapshot"></button>
+                        <button class="anpr-dot" data-slide="1" title="Clean Photo"></button>
+                        <button class="anpr-dot" data-slide="2" title="Video Clip"></button>
+                    </div>
+                </div>
+
+                <!-- Detection Details Bottom Pane -->
+                <div class="anpr-details-bottom-pane">
+                    <div class="anpr-details-left">
+                        <div class="anpr-details-heading">DETAILS</div>
+                        <div class="anpr-details-list">
+                            <div class="anpr-detail-row">
+                                <span class="anpr-detail-key">When</span>
+                                <span id="modalTimestamp" class="anpr-detail-val">19 Aug 2026, 6:00 pm</span>
+                            </div>
+                            <div class="anpr-detail-row">
+                                <span class="anpr-detail-key">Camera</span>
+                                <span id="modalCamera" class="anpr-detail-val">Terrace-Cam-23</span>
+                            </div>
+                            <div class="anpr-detail-row">
+                                <span class="anpr-detail-key">Zone</span>
+                                <span id="modalZone" class="anpr-detail-val">Zone 02</span>
+                            </div>
+                            <div class="anpr-detail-row">
+                                <span class="anpr-detail-key">Status</span>
+                                <span id="modalStatus" class="anpr-status-badge">active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="anpr-details-right">
+                        <div class="anpr-plate-box">
+                            <div class="anpr-plate-display">
+                                <div class="anpr-plate-country"><span id="modalPlateOrigin">UAE</span></div>
+                                <div id="modalPlateText" class="anpr-plate-text">2001</div>
+                            </div>
+                            <div class="anpr-conf-pill">
+                                <i data-lucide="sparkles" style="width: 11px; height: 11px;"></i>
+                                <span id="modalConfidence">99.85%</span>
+                            </div>
+                        </div>
+
+                        <div id="modalCropBox" class="anpr-crop-thumb-box" title="AI Cropped Plate Snippet">
+                            <img id="modalCropImg" src="" alt="AI Plate Crop" class="anpr-crop-thumb-img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-backdrop">
+        <div class="inspector-modal" style="max-width: 550px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i data-lucide="sliders" style="width: 18px; height: 18px; color: var(--primary);"></i>
+                    <span>Dashboard Connection Settings</span>
+                </div>
+                <button id="closeSettingsBtn" class="btn btn-icon-only" style="border: none; background: transparent;">
+                    <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <div class="settings-group">
+                <div class="form-item">
+                    <label class="form-label" for="settingBackendUrl">Direct Backend Server URL</label>
+                    <input type="text" id="settingBackendUrl" class="form-input" value="http://10.10.10.60:8009">
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="settingRefreshRate">Auto-Refresh Interval</label>
+                    <select id="settingRefreshRate" class="filter-select" style="width: 100%;">
+                        <option value="5">Every 5 seconds (High Frequency)</option>
+                        <option value="10" selected>Every 10 seconds (Standard)</option>
+                        <option value="30">Every 30 seconds</option>
+                        <option value="0">Disabled (Manual Only)</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="settingMockMode">
+                        <span class="form-label" style="margin: 0;">Force Snapshot Cache (Offline Mode)</span>
+                    </label>
+                </div>
+                <button id="saveSettingsBtn" class="btn btn-primary" style="justify-content: center; margin-top: 0.5rem;">
+                    Apply & Reconnect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

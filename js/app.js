@@ -324,7 +324,8 @@ class OmniVisionApp {
                 useCaseId,
                 severity: this.state.severityFilter,
                 page: this.state.page,
-                pageSize: this.state.pageSize
+                pageSize: this.state.pageSize,
+                timeFrame: this.state.timeFrame
             });
 
             if (res && res.data) {

@@ -20,7 +20,8 @@ import {
   Layers
 } from 'lucide-react';
 import { toCameraSlug, findCameraBySlugOrId } from '@/lib/cameraUtils';
-import { resolveUseCase, toUseCaseSlug, USE_CASE_MAP } from '@/lib/useCaseUtils';
+import { resolveUseCase, toUseCaseSlug, USE_CASE_MAP, sanitizeUseCaseId } from '@/lib/useCaseUtils';
+import { getDateRangeFromTimeFrame } from '@/lib/dateUtils';
 
 export default function CameraDashboardView({
   cameraSlug = '',
@@ -156,18 +157,20 @@ export default function CameraDashboardView({
   // Fetch Detections strictly scoped to this Route's Use Case and Camera
   const loadDetections = useCallback(async (customPage = page) => {
     try {
+      const { startDate: effectiveStartDate, endDate: effectiveEndDate } = getDateRangeFromTimeFrame(timeFrame, startDate, endDate);
+      const validUcId = sanitizeUseCaseId(currentUseCase.id);
+
       const queryParams = new URLSearchParams({
-        use_case_id: currentUseCase.id,
+        use_case_id: validUcId,
         page: customPage.toString(),
         page_size: pageSize.toString()
       });
 
-      if (cameraId) queryParams.append('camera_id', cameraId);
       if (severity && severity !== 'all') queryParams.append('severity', severity);
+      if (effectiveStartDate) queryParams.append('start_date', effectiveStartDate);
+      if (effectiveEndDate) queryParams.append('end_date', effectiveEndDate);
+      if (cameraId) queryParams.append('camera_id', cameraId);
       if (selectedZone && selectedZone !== 'all') queryParams.append('zone_id', selectedZone);
-      if (timeFrame && timeFrame !== 'all' && timeFrame !== 'all_time') queryParams.append('time_frame', timeFrame);
-      if (startDate) queryParams.append('start_date', startDate);
-      if (endDate) queryParams.append('end_date', endDate);
       if (searchQuery && searchQuery.trim()) queryParams.append('search', searchQuery.trim());
 
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kolkata';

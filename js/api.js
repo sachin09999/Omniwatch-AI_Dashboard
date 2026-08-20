@@ -142,16 +142,57 @@ export class ApiClient {
         page = 1,
         pageSize = 10,
         startDate = null,
-        endDate = null
+        endDate = null,
+        timeFrame = 'today'
     } = {}) {
+        let effectiveStart = startDate;
+        let effectiveEnd = endDate;
+
+        if (!effectiveStart || !effectiveEnd) {
+            const now = new Date();
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const todayStr = formatDate(now);
+
+            if (!timeFrame || timeFrame === 'today') {
+                effectiveStart = todayStr;
+                effectiveEnd = todayStr;
+            } else if (timeFrame === 'yesterday') {
+                const yest = new Date(now);
+                yest.setDate(now.getDate() - 1);
+                const yestStr = formatDate(yest);
+                effectiveStart = yestStr;
+                effectiveEnd = yestStr;
+            } else if (timeFrame === 'last_7_days' || timeFrame === 'this_week' || timeFrame === 'week') {
+                const w = new Date(now);
+                w.setDate(now.getDate() - 7);
+                effectiveStart = formatDate(w);
+                effectiveEnd = todayStr;
+            } else if (timeFrame === 'last_30_days' || timeFrame === 'this_month' || timeFrame === 'month') {
+                const m = new Date(now);
+                m.setDate(now.getDate() - 30);
+                effectiveStart = formatDate(m);
+                effectiveEnd = todayStr;
+            } else if (timeFrame !== 'all' && timeFrame !== 'all_time') {
+                effectiveStart = todayStr;
+                effectiveEnd = todayStr;
+            }
+        }
+
+        let validUcId = useCaseId;
+        if (!validUcId || validUcId === 'e0820c96-a414-4fd1-aaae-4fa3beaaee7f') {
+            validUcId = 'bf6e9245-1e14-4d11-a467-41ebd48c93a4';
+        } else if (validUcId === 'ca6503cf-f881-4773-ab46-f6f22289d1bf') {
+            validUcId = 'ae933a6f-c17c-49e1-9fbc-8e75710100e7';
+        }
+
         const params = {
             page,
             page_size: pageSize
         };
-        if (useCaseId) params.use_case_id = useCaseId;
+        if (validUcId && validUcId !== 'all') params.use_case_id = validUcId;
         if (severity && severity !== 'all') params.severity = severity;
-        if (startDate) params.start_date = startDate;
-        if (endDate) params.end_date = endDate;
+        if (effectiveStart) params.start_date = effectiveStart;
+        if (effectiveEnd) params.end_date = effectiveEnd;
 
         return this.request('/ai/detections', params);
     }

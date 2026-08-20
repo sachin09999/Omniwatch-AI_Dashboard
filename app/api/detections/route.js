@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MOCK_DETECTIONS } from '@/lib/mockData';
+import { getDateRangeFromTimeFrame } from '@/lib/dateUtils';
+import { sanitizeUseCaseId } from '@/lib/useCaseUtils';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,34 +10,39 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   
-  const useCaseId = searchParams.get('use_case_id');
+  const rawUseCaseId = searchParams.get('use_case_id');
   const severity = searchParams.get('severity');
   const cameraId = searchParams.get('camera_id');
   const zoneId = searchParams.get('zone_id');
-  const timeFrame = searchParams.get('time_frame');
-  const startDate = searchParams.get('start_date');
-  const endDate = searchParams.get('end_date');
+  const timeFrame = searchParams.get('time_frame') || 'today';
+  const startDateParam = searchParams.get('start_date');
+  const endDateParam = searchParams.get('end_date');
   const search = searchParams.get('search') || searchParams.get('query');
   const page = searchParams.get('page') || '1';
   const pageSize = searchParams.get('page_size') || '10';
 
+  // 1. Sanitize use_case_id to guarantee a valid UUID
+  const validUseCaseId = sanitizeUseCaseId(rawUseCaseId);
+
+  // 2. Compute start_date and end_date in YYYY-MM-DD format
+  const { startDate, endDate } = getDateRangeFromTimeFrame(timeFrame, startDateParam, endDateParam);
+
   try {
     const url = new URL(`${BACKEND_URL}/ai/detections`);
-    if (useCaseId && useCaseId !== 'all') url.searchParams.append('use_case_id', useCaseId);
-    if (severity && severity !== 'all') url.searchParams.append('severity', severity);
-    if (cameraId && cameraId !== 'all') url.searchParams.append('camera_id', cameraId);
-    if (zoneId && zoneId !== 'all') url.searchParams.append('zone_id', zoneId);
-    
-    // time_frame filter
-    if (timeFrame && timeFrame !== 'all' && timeFrame !== 'all_time') {
-      url.searchParams.append('time_frame', timeFrame);
+    if (validUseCaseId && validUseCaseId !== 'all') {
+      url.searchParams.append('use_case_id', validUseCaseId);
     }
-    if (startDate) url.searchParams.append('start_date', startDate);
-    if (endDate) url.searchParams.append('end_date', endDate);
-    if (search && search.trim()) url.searchParams.append('search', search.trim());
-
+    if (severity && severity !== 'all') {
+      url.searchParams.append('severity', severity);
+    }
     url.searchParams.append('page', page);
     url.searchParams.append('page_size', pageSize);
+    if (startDate) {
+      url.searchParams.append('start_date', startDate);
+    }
+    if (endDate) {
+      url.searchParams.append('end_date', endDate);
+    }
 
     const userTimezone = request.headers.get('x-user-timezone') || 'Asia/Kolkata';
 
@@ -55,8 +62,8 @@ export async function GET(request) {
     console.warn('[Next.js API] Detections proxy failed, using mock data:', error.message);
     
     let items = [...MOCK_DETECTIONS.data.items];
-    if (useCaseId && useCaseId !== 'all') {
-      items = items.filter(d => d.use_case_id === useCaseId);
+    if (validUseCaseId && validUseCaseId !== 'all') {
+      items = items.filter(d => d.use_case_id === validUseCaseId || d.use_case_id === rawUseCaseId);
     }
     if (severity && severity !== 'all') {
       items = items.filter(d => d.severity?.toLowerCase() === severity.toLowerCase());
@@ -94,4 +101,3 @@ export async function GET(request) {
     });
   }
 }
-

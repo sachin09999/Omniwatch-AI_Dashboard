@@ -10,7 +10,7 @@ export default function SettingsModal({
   onSaveSettings
 }) {
   const [rate, setRate] = useState(refreshInterval);
-  const [backendUrl, setBackendUrl] = useState('http://10.10.10.60:8009');
+  const [backendUrl, setBackendUrl] = useState('http://10.10.12.50:8009');
   const [forceMock, setForceMock] = useState(false);
 
   if (!isOpen) return null;

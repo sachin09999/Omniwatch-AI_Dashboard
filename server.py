@@ -2,7 +2,7 @@
 """
 OmniVision AI Dashboard Server & Proxy
 Serves static frontend assets and transparently proxies /ai/* requests to the surveillance backend
-at http://10.10.10.60:8009 with CORS support and robust error handling.
+at http://10.10.12.50:8009 with CORS support and robust error handling.
 """
 
 import os
@@ -12,7 +12,7 @@ import urllib.error
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 PORT = 8090
-TARGET_BACKEND = "http://10.10.10.60:8009"
+TARGET_BACKEND = "http://10.10.12.50:8009"
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 class OmniProxyHandler(SimpleHTTPRequestHandler):

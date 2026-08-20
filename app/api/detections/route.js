@@ -3,7 +3,7 @@ import { MOCK_DETECTIONS } from '@/lib/mockData';
 
 export const dynamic = 'force-dynamic';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.10.60:8009';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.50:8009';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);

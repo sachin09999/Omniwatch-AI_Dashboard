@@ -8,7 +8,7 @@ import { MOCK_DASHBOARD_DATA, MOCK_CAMERA_CONFIGS, MOCK_DETECTIONS } from './moc
 export class ApiClient {
     constructor() {
         this.useProxy = true; // Use relative path proxy by default
-        this.directBaseUrl = 'http://10.10.10.60:8009';
+        this.directBaseUrl = 'http://10.10.12.50:8009';
         this.proxyBaseUrl = ''; // Same host (e.g. localhost:8080)
         this.mockMode = false;
         this.lastResponseStatus = 'unknown'; // 'live', 'mock', 'error'

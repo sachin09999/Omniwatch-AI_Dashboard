@@ -202,7 +202,7 @@ class OmniVisionApp {
 
         if (api.lastResponseStatus === 'live') {
             dot.className = 'status-dot';
-            label.textContent = 'LIVE: 10.10.10.60:8009';
+            label.textContent = 'LIVE: 10.10.12.50:8009';
         } else if (api.lastResponseStatus === 'mock') {
             dot.className = 'status-dot mock';
             label.textContent = 'SNAPSHOT CACHE MODE';

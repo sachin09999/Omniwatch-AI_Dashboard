@@ -2561,102 +2561,198 @@ body {
   box-shadow: 0 2px 6px rgba(14, 165, 233, 0.35);
 }
 
-/* Comprehensive Mobile & Tablet Responsiveness */
-@media (max-width: 900px) {
+/* ==========================================================================
+   ULTRA-COMPACT MOBILE & TABLET RESPONSIVENESS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Header Compact Redesign */
   .app-header {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    padding: 0.65rem 1rem;
-  }
-
-  .brand-title {
-    font-size: 0.95rem;
-  }
-
-  .brand-subtitle {
-    font-size: 0.68rem;
-  }
-
-  .header-status-group {
+    padding: 0.45rem 0.75rem;
     gap: 0.5rem;
-  }
-
-  .anpr-main-container {
-    padding: 1rem 0.75rem;
-  }
-
-  .anpr-filter-bar {
-    padding: 0.65rem;
-    gap: 0.65rem;
-  }
-
-  .anpr-search-wrapper {
-    min-width: 100%;
-    max-width: 100%;
-  }
-
-  .filter-controls-left {
-    width: 100%;
-  }
-
-  .filter-controls-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 640px) {
-  .app-header {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
   }
 
   .brand-wrapper {
+    gap: 0.5rem;
+    max-width: 65%;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .brand-subtitle {
+    display: none; /* Hide multi-line subtitle on narrow screens to save vertical space */
+  }
+
+  .header-status-group {
+    gap: 0.4rem;
+  }
+
+  .status-pill {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .sync-timer {
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
+  }
+
+  .btn {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.75rem;
+  }
+
+  /* Main Container Padding */
+  .anpr-main-container {
+    padding: 0.65rem 0.5rem;
+  }
+
+  /* Filter Bar Compact Grid Layout */
+  .anpr-filter-bar {
+    padding: 0.5rem;
+    gap: 0.45rem;
+  }
+
+  .filter-controls-left {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem;
     width: 100%;
-    justify-content: flex-start;
+  }
+
+  .anpr-search-wrapper {
+    grid-column: 1 / 2;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .anpr-search-input {
+    padding: 0.35rem 1.6rem 0.35rem 1.8rem;
+    font-size: 0.78rem;
+  }
+
+  .anpr-view-toggle {
+    grid-column: 2 / 3;
+  }
+
+  .anpr-view-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Filter Dropdowns in Compact Grid */
+  .anpr-select-wrapper,
+  .anpr-date-select-wrapper {
+    width: 100%;
+  }
+
+  .anpr-select {
+    width: 100%;
+    padding: 0.35rem 1.5rem 0.35rem 1.8rem;
+    font-size: 0.76rem;
+  }
+
+  /* Right-side Action Buttons */
+  .filter-controls-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+  }
+
+  .anpr-filter-btn,
+  .anpr-reset-btn {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.76rem;
+  }
+
+  /* Compact Data Table */
+  .anpr-table-container {
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .anpr-table {
+    min-width: 680px;
+    font-size: 0.78rem;
+  }
+
+  .anpr-table thead th {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.76rem;
+  }
+
+  .anpr-table tbody td {
+    padding: 0.55rem 0.65rem;
+  }
+
+  /* Pagination Bar */
+  .anpr-pagination {
+    padding: 0.5rem 0.25rem;
+    gap: 0.5rem;
+  }
+
+  .anpr-pagination-info {
+    font-size: 0.76rem;
+  }
+
+  .anpr-pagesize-label,
+  .anpr-pagesize-select {
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .brand-wrapper {
+    max-width: 100%;
+    justify-content: space-between;
   }
 
   .header-status-group {
     width: 100%;
     justify-content: space-between;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .anpr-filter-bar {
-    flex-direction: column;
-    align-items: stretch;
+    padding-top: 0.2rem;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .filter-controls-left {
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .anpr-search-wrapper {
     width: 100%;
   }
 
-  .anpr-select-wrapper,
-  .anpr-date-select-wrapper,
-  .anpr-select {
-    width: 100%;
-  }
-
-  .filter-controls-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .anpr-pagination {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .anpr-pagination-controls {
-    width: 100%;
-    justify-content: space-between;
+  .anpr-view-toggle {
+    align-self: flex-end;
   }
 }
 

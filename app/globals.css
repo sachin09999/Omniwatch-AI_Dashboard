@@ -2469,57 +2469,9 @@ body {
 }
 
 /* Camera Navigation Banner & Use Case Tab Switcher */
-.camera-nav-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 0.5rem 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-.camera-nav-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.camera-back-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: all 0.15s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-.camera-back-pill:hover {
-  background: var(--bg-surface-secondary);
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateX(-2px);
-}
-
+.camera-nav-banner,
 .camera-current-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.75rem;
-  background: var(--primary-bg);
-  border: 1px solid var(--primary-border);
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--primary);
+  display: none !important;
 }
 
 .usecase-tab-switcher {

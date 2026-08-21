@@ -9,13 +9,14 @@ export default function ANPRTable({
   isLoading = false,
   sortField = 'detected_at',
   sortDirection = 'desc',
-  onSortChange
+  onSortChange,
+  useCaseName = 'ANPR'
 }) {
   if (isLoading) {
     return (
       <div className="anpr-empty-box">
         <div className="anpr-spinner"></div>
-        <p>Loading ANPR detections...</p>
+        <p>Loading {useCaseName} detections...</p>
       </div>
     );
   }
@@ -24,7 +25,7 @@ export default function ANPRTable({
     return (
       <div className="anpr-empty-box">
         <SearchX size={40} style={{ opacity: 0.4, marginBottom: '0.5rem' }} />
-        <h4 style={{ fontWeight: 600, color: 'var(--text-main)' }}>No ANPR records found</h4>
+        <h4 style={{ fontWeight: 600, color: 'var(--text-main)' }}>No {useCaseName} records found</h4>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Try adjusting your search criteria or date filter.</p>
       </div>
     );

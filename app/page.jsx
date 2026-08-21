@@ -19,11 +19,12 @@ export default function AdminMainDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [countdown, setCountdown] = useState(10);
 
-  // Initialize theme
+  // Initialize theme and browser title
   useEffect(() => {
     const savedTheme = localStorage.getItem('omnivision_theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
+    document.title = 'OmniVision AI Command Center | Omni Watch';
   }, []);
 
   const toggleTheme = () => {

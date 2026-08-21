@@ -7,13 +7,14 @@ export default function SnapshotGrid({
   snapshots = [],
   onSelectSnapshot,
   imageMode = 'full',
-  isLoading = false
+  isLoading = false,
+  useCaseName = null
 }) {
   if (isLoading) {
     return (
       <div className="snapshot-loading-container">
         <div className="snapshot-spinner"></div>
-        <p>Fetching AI stream snapshots...</p>
+        <p>Fetching {useCaseName ? `${useCaseName}` : 'AI stream'} snapshots...</p>
       </div>
     );
   }
@@ -22,7 +23,7 @@ export default function SnapshotGrid({
     return (
       <div className="snapshot-empty-container">
         <SearchX size={44} className="snapshot-empty-icon" />
-        <h3>No snapshots found</h3>
+        <h3>No {useCaseName ? `${useCaseName} records` : 'snapshots'} found</h3>
         <p>Try adjusting your search query or filter criteria.</p>
       </div>
     );

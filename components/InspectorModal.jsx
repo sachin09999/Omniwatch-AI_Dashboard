@@ -359,7 +359,7 @@ export default function InspectorModal({
               <Camera size={18} className="anpr-header-icon" />
             </div>
             <h3 className="anpr-dialog-title">
-              ANPR Detection — Snapshot &amp; recording
+              {detection?.use_case_name || 'AI'} Detection — Snapshot &amp; recording
             </h3>
             <span className="anpr-dialog-id-badge">ID: #{detection.sr_id}</span>
           </div>

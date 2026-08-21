@@ -43,6 +43,15 @@ export async function GET(request) {
     if (endDate) {
       url.searchParams.append('end_date', endDate);
     }
+    if (cameraId && cameraId !== 'all') {
+      url.searchParams.append('camera_id', cameraId);
+    }
+    if (zoneId && zoneId !== 'all') {
+      url.searchParams.append('zone_id', zoneId);
+    }
+    if (search && search.trim()) {
+      url.searchParams.append('search', search.trim());
+    }
 
     const userTimezone = request.headers.get('x-user-timezone') || 'Asia/Kolkata';
 

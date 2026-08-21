@@ -154,6 +154,13 @@ export default function CameraDashboardView({
     return `${currentUseCase.subtitle} • All Cameras Stream`;
   }, [cameraName, currentUseCase]);
 
+  // Dynamic Browser Tab Title
+  useEffect(() => {
+    if (headerTitle) {
+      document.title = `${headerTitle} | Omni Watch`;
+    }
+  }, [headerTitle]);
+
   // Fetch Detections strictly scoped to this Route's Use Case and Camera
   const loadDetections = useCallback(async (customPage = page) => {
     try {
@@ -452,6 +459,7 @@ export default function CameraDashboardView({
                 sortField={sortField}
                 sortDirection={sortDirection}
                 onSortChange={handleSortChange}
+                useCaseName={currentUseCase.name}
               />
             ) : (
               <SnapshotGrid
@@ -459,6 +467,7 @@ export default function CameraDashboardView({
                 onSelectSnapshot={setSelectedDetection}
                 imageMode="full"
                 isLoading={isLoading}
+                useCaseName={currentUseCase.name}
               />
             )}
 

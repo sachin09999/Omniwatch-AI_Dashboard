@@ -143,7 +143,10 @@ export class ApiClient {
         pageSize = 10,
         startDate = null,
         endDate = null,
-        timeFrame = 'today'
+        timeFrame = 'today',
+        cameraId = null,
+        zoneId = null,
+        search = null
     } = {}) {
         let effectiveStart = startDate;
         let effectiveEnd = endDate;
@@ -193,6 +196,9 @@ export class ApiClient {
         if (severity && severity !== 'all') params.severity = severity;
         if (effectiveStart) params.start_date = effectiveStart;
         if (effectiveEnd) params.end_date = effectiveEnd;
+        if (cameraId && cameraId !== 'all') params.camera_id = cameraId;
+        if (zoneId && zoneId !== 'all') params.zone_id = zoneId;
+        if (search && search.trim()) params.search = search.trim();
 
         return this.request('/ai/detections', params);
     }

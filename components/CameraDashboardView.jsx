@@ -341,21 +341,17 @@ export default function CameraDashboardView({
       />
 
       <main className="anpr-main-container">
-        {/* Navigation & AI Model Switcher Bar */}
-        <div className="camera-nav-banner">
-          <div className="camera-nav-left">
-            <Link href="/" className="camera-back-pill">
-              <ArrowLeft size={14} />
-              <span>All Facility Cameras</span>
-            </Link>
-            {cameraName && (
+        {/* Navigation & Scoped Camera Badge Bar */}
+        {cameraName && (
+          <div className="camera-nav-banner">
+            <div className="camera-nav-left">
               <div className="camera-current-badge">
                 <CameraIcon size={14} />
                 <span>{cameraName}</span>
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Scoped Detections Section */}
         <section className="camera-events-section">

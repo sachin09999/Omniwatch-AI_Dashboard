@@ -355,57 +355,6 @@ export default function CameraDashboardView({
               </div>
             )}
           </div>
-
-          <div className="usecase-tab-switcher">
-            <button
-              type="button"
-              className={`usecase-tab-btn ${currentUseCase.slug === 'anpr' ? 'active' : ''}`}
-              onClick={() => {
-                setSelectedUseCaseSlug('anpr');
-                setPage(1);
-                if (cameraSlug) {
-                  window.history.pushState(null, '', `/camera/${cameraSlug}/anpr`);
-                } else {
-                  window.history.pushState(null, '', `/anpr`);
-                }
-              }}
-            >
-              <Car size={14} />
-              <span>ANPR</span>
-            </button>
-            <button
-              type="button"
-              className={`usecase-tab-btn ${currentUseCase.slug === 'face' ? 'active' : ''}`}
-              onClick={() => {
-                setSelectedUseCaseSlug('face');
-                setPage(1);
-                if (cameraSlug) {
-                  window.history.pushState(null, '', `/camera/${cameraSlug}/face`);
-                } else {
-                  window.history.pushState(null, '', `/face`);
-                }
-              }}
-            >
-              <User size={14} />
-              <span>Face Recognition</span>
-            </button>
-            <button
-              type="button"
-              className={`usecase-tab-btn ${currentUseCase.slug === 'object' ? 'active' : ''}`}
-              onClick={() => {
-                setSelectedUseCaseSlug('object');
-                setPage(1);
-                if (cameraSlug) {
-                  window.history.pushState(null, '', `/camera/${cameraSlug}/object`);
-                } else {
-                  window.history.pushState(null, '', `/object`);
-                }
-              }}
-            >
-              <Box size={14} />
-              <span>Object Detection</span>
-            </button>
-          </div>
         </div>
 
         {/* Scoped Detections Section */}

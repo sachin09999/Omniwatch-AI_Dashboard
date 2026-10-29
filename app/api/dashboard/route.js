@@ -1,20 +1,22 @@
 import { NextResponse } from 'next/server';
 import { MOCK_DASHBOARD_DATA } from '@/lib/mockData';
+import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const timeFrame = searchParams.get('time_frame') || 'today';
+  const backendBase = getBackendBase();
 
   try {
-    const res = await fetch(`${BACKEND_URL}/ai/detections/dashboard?time_frame=${timeFrame}`, {
-      headers: { 'Accept': 'application/json' },
+    const res = await fetch(`${backendBase}/ai/detections/dashboard?time_frame=${timeFrame}`, {
+      headers: getBackendHeaders(),
       cache: 'no-store'
     });
 
     if (!res.ok) {
-      throw new Error(`Backend returned status ${res.status}`);
+      throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);
     }
 
     const data = await res.json();

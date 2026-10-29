@@ -1,24 +1,24 @@
 import { NextResponse } from 'next/server';
 import { MOCK_CAMERA_CONFIGS } from '@/lib/mockData';
+import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
-
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const useCaseId = searchParams.get('use_case_id');
+  const backendBase = getBackendBase();
 
   try {
-    const url = new URL(`${BACKEND_URL}/ai/camera-ai-configs`);
+    const url = new URL(`${backendBase}/ai/camera-ai-configs`);
     if (useCaseId) url.searchParams.append('use_case_id', useCaseId);
 
     const res = await fetch(url.toString(), {
-      headers: { 'Accept': 'application/json' },
+      headers: getBackendHeaders(),
       cache: 'no-store'
     });
 
-    if (!res.ok) throw new Error(`Backend returned status ${res.status}`);
+    if (!res.ok) throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);
 
     const data = await res.json();
     return NextResponse.json(data);

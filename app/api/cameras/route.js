@@ -1,16 +1,15 @@
 import { NextResponse } from 'next/server';
+import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
-
 export async function GET(request) {
-  const backendBase = (process.env.BACKEND_URL || 'http://10.10.12.52:8009').trim().replace(/\/+$/, '');
+  const backendBase = getBackendBase();
   const targetUrl = `${backendBase}/ai/cameras`;
 
   try {
     const res = await fetch(targetUrl, {
-      headers: { 'Accept': 'application/json' },
+      headers: getBackendHeaders(),
       cache: 'no-store'
     });
 

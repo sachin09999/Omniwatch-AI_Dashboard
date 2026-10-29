@@ -11,6 +11,7 @@ services:
       - NODE_ENV=production
       - PORT=8090
       - BACKEND_URL=${BACKEND_URL:-http://10.10.12.52:8009}
+      - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-oat_MjM.VEtjRUFTR1l3UWtiYWdybjN0dXktWUpWTHY1SWlzQVFrcDlNQlhoWjEzNDAzMTcyMzc}
       - NEXT_TELEMETRY_DISABLED=1
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8090/ || exit 1"]

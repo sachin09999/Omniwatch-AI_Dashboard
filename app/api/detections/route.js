@@ -3,9 +3,9 @@ import { MOCK_DETECTIONS } from '@/lib/mockData';
 import { getDateRangeFromTimeFrame } from '@/lib/dateUtils';
 import { sanitizeUseCaseId } from '@/lib/useCaseUtils';
 
-export const dynamic = 'force-dynamic';
+import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://10.10.12.52:8009';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -26,9 +26,10 @@ export async function GET(request) {
 
   // 2. Compute start_date and end_date in YYYY-MM-DD format
   const { startDate, endDate } = getDateRangeFromTimeFrame(timeFrame, startDateParam, endDateParam);
+  const backendBase = getBackendBase();
 
   try {
-    const url = new URL(`${BACKEND_URL}/ai/detections`);
+    const url = new URL(`${backendBase}/ai/detections`);
     if (validUseCaseId && validUseCaseId !== 'all') {
       url.searchParams.append('use_case_id', validUseCaseId);
     }
@@ -56,14 +57,13 @@ export async function GET(request) {
     const userTimezone = request.headers.get('x-user-timezone') || 'Asia/Kolkata';
 
     const res = await fetch(url.toString(), {
-      headers: {
-        'Accept': 'application/json',
+      headers: getBackendHeaders({
         'X-User-Timezone': userTimezone
-      },
+      }),
       cache: 'no-store'
     });
 
-    if (!res.ok) throw new Error(`Backend returned status ${res.status}`);
+    if (!res.ok) throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);
 
     const data = await res.json();
     return NextResponse.json(data);

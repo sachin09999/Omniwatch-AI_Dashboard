@@ -241,10 +241,11 @@ body {
 
 /* Main Container */
 .anpr-main-container {
+  flex: 1;
   max-width: 1560px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 3rem 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -516,6 +517,7 @@ body {
 
 /* ANPR Content Section */
 .anpr-content-section {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -724,8 +726,14 @@ body {
 
 /* Empty & Loading */
 .anpr-empty-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
   text-align: center;
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   color: var(--text-muted);
 }
 
@@ -741,6 +749,7 @@ body {
 
 /* Pagination Bar */
 .anpr-pagination {
+  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2454,6 +2463,7 @@ body {
 
 .admin-events-section,
 .camera-events-section {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;

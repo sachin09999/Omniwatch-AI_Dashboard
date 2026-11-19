@@ -99,8 +99,10 @@ export async function GET(request) {
     const paginated = items.slice(start, start + ps);
 
     return NextResponse.json({
-      message: 'Success',
-      status: 'success',
+      message: 'Proxy Error Fallback',
+      status: 'error_fallback',
+      debug_error: error.message,
+      debug_target_url: url.toString(),
       data: {
         items: paginated,
         total: items.length,

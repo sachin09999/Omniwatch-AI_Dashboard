@@ -14,7 +14,7 @@ export async function GET(request) {
   const severity = searchParams.get('severity');
   const cameraId = searchParams.get('camera_id');
   const zoneId = searchParams.get('zone_id');
-  const timeFrame = searchParams.get('time_frame') || 'today';
+  const timeFrame = searchParams.get('time_frame') || 'all_time';
   const startDateParam = searchParams.get('start_date');
   const endDateParam = searchParams.get('end_date');
   const search = searchParams.get('search') || searchParams.get('query');

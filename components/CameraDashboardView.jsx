@@ -77,7 +77,7 @@ export default function CameraDashboardView({
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [severity, setSeverity] = useState('all');
-  const [timeFrame, setTimeFrame] = useState('today');
+  const [timeFrame, setTimeFrame] = useState('all_time');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedZone, setSelectedZone] = useState('all');
@@ -272,7 +272,7 @@ export default function CameraDashboardView({
     setSearchQuery('');
     setSeverity('all');
     setSelectedZone('all');
-    setTimeFrame('today');
+    setTimeFrame('all_time');
     setStartDate('');
     setEndDate('');
     setSortField('detected_at');
@@ -352,11 +352,13 @@ export default function CameraDashboardView({
             onSeverityChange={(s) => {
               setSeverity(s);
               setPage(1);
+              setTimeout(() => loadDetections(1), 0);
             }}
             timeFrame={timeFrame}
             onTimeFrameChange={(t) => {
               setTimeFrame(t);
               setPage(1);
+              setTimeout(() => loadDetections(1), 0);
             }}
             startDate={startDate}
             onStartDateChange={(d) => {
@@ -376,6 +378,7 @@ export default function CameraDashboardView({
             onZoneChange={(z) => {
               setSelectedZone(z);
               setPage(1);
+              setTimeout(() => loadDetections(1), 0);
             }}
             zones={zones}
             onApplyFilter={handleApplyFilter}

@@ -136,7 +136,9 @@ export default function CameraDashboardView({
     }
   }, []);
 
-  const cameraId = currentCamera?.id || (cameraSlug && !['anpr', 'object', 'objects', 'face', 'faces'].includes(cameraSlug.toLowerCase()) ? cameraSlug : null);
+  const cameraId = (cameraSlug && !['anpr', 'object', 'objects', 'face', 'faces'].includes(cameraSlug.toLowerCase()))
+    ? (currentCamera?.id || cameraSlug)
+    : null;
   const cameraName = currentCamera?.name || (cameraId ? `Camera ${cameraSlug}` : null);
 
   // Dynamic Header Title & Subtitle based on Route

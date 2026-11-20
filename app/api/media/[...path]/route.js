@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
+import { getBackendBase, backendFetch } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,9 +24,8 @@ export async function GET(request, { params }) {
   }
 
   try {
-    const res = await fetch(targetUrl, {
-      headers: getBackendHeaders(extraHeaders),
-      cache: 'no-store'
+    const res = await backendFetch(targetUrl, {
+      headers: extraHeaders
     });
 
     if (!res.ok && res.status !== 206) {

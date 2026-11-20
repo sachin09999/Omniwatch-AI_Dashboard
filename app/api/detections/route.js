@@ -3,7 +3,7 @@ import { MOCK_DETECTIONS } from '@/lib/mockData';
 import { getDateRangeFromTimeFrame } from '@/lib/dateUtils';
 import { sanitizeUseCaseId } from '@/lib/useCaseUtils';
 
-import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
+import { getBackendBase, backendFetch } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,11 +56,10 @@ export async function GET(request) {
 
     const userTimezone = request.headers.get('x-user-timezone') || 'Asia/Kolkata';
 
-    const res = await fetch(url.toString(), {
-      headers: getBackendHeaders({
+    const res = await backendFetch(url.toString(), {
+      headers: {
         'X-User-Timezone': userTimezone
-      }),
-      cache: 'no-store'
+      }
     });
 
     if (!res.ok) throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);

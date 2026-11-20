@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { MOCK_DASHBOARD_DATA } from '@/lib/mockData';
-import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
+import { getBackendBase, backendFetch } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,10 +10,7 @@ export async function GET(request) {
   const backendBase = getBackendBase();
 
   try {
-    const res = await fetch(`${backendBase}/ai/detections/dashboard?time_frame=${timeFrame}`, {
-      headers: getBackendHeaders(),
-      cache: 'no-store'
-    });
+    const res = await backendFetch(`${backendBase}/ai/detections/dashboard?time_frame=${timeFrame}`);
 
     if (!res.ok) {
       throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBackendBase, getBackendHeaders } from '@/lib/backendClient';
+import { getBackendBase, backendFetch } from '@/lib/backendClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,10 +8,7 @@ export async function GET(request) {
   const targetUrl = `${backendBase}/ai/use-cases/`;
 
   try {
-    const res = await fetch(targetUrl, {
-      headers: getBackendHeaders(),
-      cache: 'no-store'
-    });
+    const res = await backendFetch(targetUrl);
 
     if (!res.ok) throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);
 

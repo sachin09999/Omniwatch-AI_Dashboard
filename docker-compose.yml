@@ -11,10 +11,10 @@ services:
       - NODE_ENV=production
       - PORT=8090
       - BACKEND_URL=${BACKEND_URL:-http://10.10.12.52:8009}
-      - AUTH_LOGIN_URL=${AUTH_LOGIN_URL:-http://10.10.10.60:5003/api/auth/login}
+      - AUTH_LOGIN_URL=${AUTH_LOGIN_URL:-http://10.10.12.52:5003/api/auth/login}
       - AUTH_EMAIL=${AUTH_EMAIL:-admin@digital-twin-solutions.com}
-      - AUTH_PASSWORD=${AUTH_PASSWORD:-U2FsdGVkX1+MH3Xce3vo0+SzEsRBkLOpIUa5mg45gl0=}
-      - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-oat_MTE4.ZzBQaFZnUTk0YmktN21pUUpxWTZXWVlOVE9VYzNfcWl2RGlkV3ZzMDU0OTAwNzczOA}
+      - AUTH_PASSWORD=${AUTH_PASSWORD:-U2FsdGVkX1/dpHps2crzBKIZH8nK3A+A89BV1+Q2lZs=}
+      - BACKEND_AUTH_TOKEN=${BACKEND_AUTH_TOKEN:-oat_NjM.V1FYb2lTU2FyQXFFWUc0U2dNRHFSVV9ha3c3OVVHV1NvblNaUTQ4ZTMwMjY4NTcyOQ}
       - NEXT_TELEMETRY_DISABLED=1
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8090/ || exit 1"]

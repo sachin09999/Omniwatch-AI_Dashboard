@@ -27,6 +27,7 @@ export async function GET(request) {
   // 2. Compute start_date and end_date in YYYY-MM-DD format
   const { startDate, endDate } = getDateRangeFromTimeFrame(timeFrame, startDateParam, endDateParam);
   const backendBase = getBackendBase();
+  let targetUrl = `${backendBase}/ai/detections`;
 
   try {
     const url = new URL(`${backendBase}/ai/detections`);
@@ -54,9 +55,10 @@ export async function GET(request) {
       url.searchParams.append('search', search.trim());
     }
 
+    targetUrl = url.toString();
     const userTimezone = request.headers.get('x-user-timezone') || 'Asia/Kolkata';
 
-    const res = await backendFetch(url.toString(), {
+    const res = await backendFetch(targetUrl, {
       headers: {
         'X-User-Timezone': userTimezone
       }
@@ -101,7 +103,7 @@ export async function GET(request) {
       message: 'Proxy Error Fallback',
       status: 'error_fallback',
       debug_error: error.message,
-      debug_target_url: url.toString(),
+      debug_target_url: targetUrl,
       data: {
         items: paginated,
         total: items.length,

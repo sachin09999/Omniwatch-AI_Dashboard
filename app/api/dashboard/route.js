@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const timeFrame = searchParams.get('time_frame') || 'today';
+  const timeFrame = searchParams.get('time_frame') || 'all_time';
   const backendBase = getBackendBase();
 
   try {

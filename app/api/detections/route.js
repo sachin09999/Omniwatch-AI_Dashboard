@@ -20,6 +20,8 @@ export async function GET(request) {
   const search = searchParams.get('search') || searchParams.get('query');
   const page = searchParams.get('page') || '1';
   const pageSize = searchParams.get('page_size') || '10';
+  const sortBy = searchParams.get('sort_by') || 'detected_at';
+  const sortOrder = searchParams.get('sort_order') || 'desc';
 
   // 1. Sanitize use_case_id to guarantee a valid UUID
   const validUseCaseId = sanitizeUseCaseId(rawUseCaseId);
@@ -39,6 +41,8 @@ export async function GET(request) {
     }
     url.searchParams.append('page', page);
     url.searchParams.append('page_size', pageSize);
+    url.searchParams.append('sort_by', sortBy);
+    url.searchParams.append('sort_order', sortOrder);
     if (startDate) {
       url.searchParams.append('start_date', startDate);
     }
@@ -67,6 +71,13 @@ export async function GET(request) {
     if (!res.ok) throw new Error(`Backend returned status ${res.status}: ${res.statusText}`);
 
     const data = await res.json();
+    if (Array.isArray(data?.data?.items)) {
+      data.data.items.sort((a, b) => {
+        const tA = a?.detected_at ? new Date(a.detected_at).getTime() : 0;
+        const tB = b?.detected_at ? new Date(b.detected_at).getTime() : 0;
+        return tB - tA;
+      });
+    }
     return NextResponse.json(data);
   } catch (error) {
     console.warn('[Next.js API] Detections proxy failed, using mock data:', error.message);

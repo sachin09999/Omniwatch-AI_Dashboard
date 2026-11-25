@@ -21,7 +21,7 @@ export default function ANPRFilterBar({
   onViewModeChange,
   severity = 'all',
   onSeverityChange,
-  timeFrame = 'today',
+  timeFrame = 'all_time',
   onTimeFrameChange,
   startDate = '',
   onStartDateChange,
